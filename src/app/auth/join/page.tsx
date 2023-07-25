@@ -29,22 +29,18 @@ export default function Home() {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const [isLogin] = useAtom(isLoginAtom)
+  const [isLogin] = useAtom(isLoginAtom);
 
   const { checkNeedLogin } = useAuth();
 
   useEffect(() => {
-    console.log(isLogin)
+    console.log(isLogin);
     checkNeedLogin();
-  }, []);
+  }, [isLogin]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password
-      );
+      const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
       const user = userCredential.user;
       console.log(user);
 
@@ -59,12 +55,12 @@ export default function Home() {
   };
 
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between p-24'>
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input defaultValue='test' {...register('email')} />
-        <input type='password' {...register('password', { required: true })} />
+        <input defaultValue="test" {...register('email')} />
+        <input type="password" {...register('password', { required: true })} />
 
-        <button type='submit'>회원가입</button>
+        <button type="submit">회원가입</button>
       </form>
     </main>
   );

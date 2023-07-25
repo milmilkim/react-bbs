@@ -1,9 +1,12 @@
-import Image from 'next/image'
+'use client';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { FirebaseError } from '@firebase/util';
 
+import { useState } from 'react';
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      안녕
+    <main className='flex min-h-screen flex-col items-center justify-between p-24'>
+      홈페이지
     </main>
-  )
+  );
 }

@@ -9,5 +9,5 @@ export default function Login() {
   const [isLogin] = useAtom(isLoginAtom);
   checkLoginStatus();
 
-  return <div>{isLogin ? '로그인' : '로그아웃'}</div>;
+  return null;
 }

@@ -1,18 +1,9 @@
-import './globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import Login from '@/components/common/Login';
 import { database } from '@/utils/firebase';
-import {
-  equalTo,
-  get,
-  onValue,
-  orderByChild,
-  query,
-  ref,
-} from 'firebase/database';
-import config from '../../firebase.config'
-const inter = Inter({ subsets: ['latin'] });
+import { onValue, ref } from 'firebase/database';
+import NoAdmin from '@/components/common/NoAdmin';
+import 'src/app/globals.css';
 
 export const metadata: Metadata = {
   title: 'My App',
@@ -21,10 +12,9 @@ export const metadata: Metadata = {
 
 const getData = () => {
   return new Promise((resolve, reject) => {
-    const userRef = ref(database, 'users/');
-    const adminUserRef = query(userRef, orderByChild('role'), equalTo('user'));
+    const adminRef = ref(database, 'admins/');
 
-    onValue(adminUserRef, (snapshot) => {
+    onValue(adminRef, (snapshot) => {
       if (snapshot.exists()) {
         resolve(snapshot.val());
       } else {
@@ -41,19 +31,9 @@ export default async function RootLayout({
 }) {
   return (
     <html lang='ko'>
-      <body className={inter.className}>
+      <body>
         <Login />
-        <div>전역 레이아웃</div>
-        {(await getData()) ? (
-          <>{children}</>
-        ) : (
-          <main className='flex min-h-screen flex-col items-center justify-between p-24'>
-           <div>
-            <p>관리자 계정이 존재하지 않습니다. 관리자 계정을 추가하세요.</p>
-            <p>{JSON.stringify(config)}</p>
-            </div>
-          </main>
-        )}
+        {(await getData()) ? <>{children}</> : <NoAdmin />}
       </body>
     </html>
   );

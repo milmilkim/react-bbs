@@ -40,9 +40,6 @@ export default function Home() {
     login.logout();
   };
 
-  const addAdmin = () => {
-    console.log('추가추가추가~_~');
-  };
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
@@ -75,7 +72,6 @@ export default function Home() {
         <button type='submit'>로그인</button>
       </form>
       <button onClick={logout}>로그아웃!</button>
-      <button onClick={addAdmin}>어드민추가</button>
     </main>
   );
 }

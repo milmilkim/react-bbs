@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import 'src/app/globals.css';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { auth } from '@/app/api/firebase';
+import { auth as cAuth } from '@/utils/firebase';
 
 export const metadata: Metadata = {
   title: 'My App',
@@ -16,11 +16,12 @@ export default async function RootLayout({
 }) {
   // 어드민 권한 확인
   const cookieStore = cookies();
-  const uid = cookieStore.get('uid')?.value;
+  const token = cookieStore.get('token')?.value;
+  if (!token) redirect('/auth/login');
 
-  if (!uid) redirect('/');
+  const user = await auth.verifyIdToken(token);
 
-  const user = await auth.getUser(uid);
+  if (!user.admin) redirect('/');
 
   return (
     <>

@@ -11,16 +11,16 @@ const useLogin = () => {
   const [, setIsLogin] = useAtom(isLoginAtom);
   const [cookies, setCookie, deleteCookie] = useCookies();
 
-  const login = (user: User) => {
-    setCookie('uid', user.uid);
+  const login = async (user: User) => {
+    deleteCookie('token');
+    setCookie('token', await user.getIdToken());
     setIsLogin(true);
   };
 
   const logout = async () => {
+    setCookie('token', '')
     await signOut(auth);
-    deleteCookie('uid');
     setIsLogin(false);
-    console.log('logout');
   };
 
   return { login, logout };

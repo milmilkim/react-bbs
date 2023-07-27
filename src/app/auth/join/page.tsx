@@ -7,7 +7,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { getDatabase, ref, set } from 'firebase/database';
 import useAuth from '@/hooks/auth/useAuth';
 import { useEffect } from 'react';
-import { isLoginAtom } from '@/atoms/authAtom';
+import { isLoginAtom } from '@/store/authStore';
 import { useAtom } from 'jotai';
 
 type Inputs = {

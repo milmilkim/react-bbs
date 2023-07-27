@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { isLoginAtom } from '@/atoms/authAtom';
+import { isLoginAtom } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 
 const useAuth = () => {
@@ -7,7 +7,6 @@ const useAuth = () => {
   const router = useRouter();
   const checkNeedLogin = () => {
     if (isLogin) {
-      console.log(isLogin);
       router.replace('/');
     }
   };

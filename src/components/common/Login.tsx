@@ -1,13 +1,17 @@
 'use client';
 
-import { isLoginAtom } from '@/atoms/authAtom';
-import useLogin from '@/hooks/auth/useLogin';
+import { isLoginAtom } from '@/store/authStore';
 import { useAtom } from 'jotai';
+import useLogin from '@/hooks/auth/useLogin';
+import { useEffect } from 'react';
 
 export default function Login() {
-  const { checkLoginStatus } = useLogin();
   const [isLogin] = useAtom(isLoginAtom);
-  checkLoginStatus();
+  const { logout } = useLogin();
 
-  return null;
+  useEffect(() => {
+    console.log(isLogin);
+  }, [isLogin]);
+
+  return <>{isLogin ? <button onClick={logout}>로그아웃</button> : null}</>;
 }

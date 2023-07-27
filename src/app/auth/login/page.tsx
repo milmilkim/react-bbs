@@ -1,22 +1,22 @@
 'use client';
 
-import {
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut,
-} from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FirebaseError } from '@firebase/util';
 import { auth } from '@/utils/firebase';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import useLogin from '@/hooks/auth/useLogin';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useSetAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
+import { isShowSpinnerAtom } from '@/store/LayoutStore';
+import { isLoginAtom } from '@/store/authStore';
 
 type Inputs = {
   email: string;
   password: string;
 };
 
-const logout = () => {
-  signOut(auth);
-};
 export default function Home() {
   const {
     register,
@@ -24,33 +24,58 @@ export default function Home() {
     formState: { errors },
   } = useForm<Inputs>();
 
+  const router = useRouter();
+
+  const setIsShowSpinner = useSetAtom(isShowSpinnerAtom);
+  const isLogin = useAtomValue(isLoginAtom)
+
+  useEffect(() => {
+    if(isLogin) {
+      router.push('/')
+    }
+  }, [isLogin]);
+
+  const login = useLogin();
+  const logout = () => {
+    login.logout();
+  };
+
+  const addAdmin = () => {
+    console.log('추가추가추가~_~');
+  };
+
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
+      setIsShowSpinner(true);
       const userCredential = await signInWithEmailAndPassword(
         auth,
         data.email,
         data.password
       );
       const user = userCredential.user;
-      console.log(user);
+      login.login(user);
+
     } catch (err) {
       if (err instanceof FirebaseError) {
         console.log(err.code);
         console.log(err.message);
         alert(err.message);
       }
+    } finally {
+      setIsShowSpinner(false);
     }
   };
 
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between p-24'>
+    <main className='min-h-screen'>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input defaultValue='test' {...register('email')} />
         <input type='password' {...register('password', { required: true })} />
 
         <button type='submit'>로그인</button>
       </form>
-      <button onClick={logout}>로그아웃</button>
+      <button onClick={logout}>로그아웃!</button>
+      <button onClick={addAdmin}>어드민추가</button>
     </main>
   );
 }

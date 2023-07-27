@@ -1,34 +1,29 @@
 'use client';
 
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { User, onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '@/utils/firebase';
 
 import { useAtom } from 'jotai';
-import { isLoginAtom } from '@/atoms/authAtom';
+import { isLoginAtom } from '@/store/authStore';
+import { useCookies } from 'react-cookie';
 
 const useLogin = () => {
   const [, setIsLogin] = useAtom(isLoginAtom);
+  const [cookies, setCookie, deleteCookie] = useCookies();
 
-  const login = () => {
+  const login = (user: User) => {
+    setCookie('uid', user.uid);
     setIsLogin(true);
   };
 
-  const logout = () => {
-    signOut(auth);
+  const logout = async () => {
+    await signOut(auth);
+    deleteCookie('uid');
     setIsLogin(false);
+    console.log('logout');
   };
 
-  const checkLoginStatus = () => {
-    onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        login();
-      } else {
-        logout();
-      }
-    });
-  };
-
-  return { login, logout, checkLoginStatus };
+  return { login, logout };
 };
 
 export default useLogin;

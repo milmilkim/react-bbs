@@ -5,14 +5,13 @@ import { firebaseConfigKey } from '@/types/firebase';
 import { orbit } from '@/utils/googleFonts';
 import { FirebaseError } from 'firebase/app';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FaEnvelope, FaKey, FaExclamationCircle } from 'react-icons/fa';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useRouter } from 'next/navigation';
-import { useSession, signIn, signOut } from 'next-auth/react';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { signIn } from 'next-auth/react';
+import { useSetAtom } from 'jotai';
 import { isShowSpinnerAtom } from '@/store/LayoutStore';
-import { isLoginAtom } from '@/store/authStore';
 
 const WarnIcon: React.FC<{ message: string }> = ({ message }) => {
   return (
@@ -30,13 +29,8 @@ const NoAdmin = () => {
   } = useForm<Inputs>();
 
   const setIsShowSpinner = useSetAtom(isShowSpinnerAtom);
-  const isLogin = useAtomValue(isLoginAtom);
 
-  useEffect(() => {
-    if (isLogin) {
-      router.push('/');
-    }
-  }, [isLogin]);
+
 
   const checkNull = () => {
     const keys: firebaseConfigKey[] = ['apiKey', 'appId', 'authDomain', 'databaseURL', 'messagingSenderId', 'projectId', 'storageBucket'];

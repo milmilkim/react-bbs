@@ -1,9 +1,9 @@
-import NextAuth, { NextAuthOptions } from 'next-auth';
-import { FirestoreAdapter } from '@auth/firebase-adapter';
-import { firestore } from '@/lib/firestore';
+import { NextAuthOptions } from 'next-auth';
+// import { FirestoreAdapter } from '@auth/firebase-adapter';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/utils/firebase';
+import { auth } from '@/lib/firebase';
+import { auth as admin } from '@/lib/admin';
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -21,9 +21,17 @@ export const authOptions: NextAuthOptions = {
 
       async authorize(credentials, req) {
         try {
-          const userCredential = await signInWithEmailAndPassword(auth, credentials?.email || '', credentials?.password || '');
+          const userCredential = await signInWithEmailAndPassword(
+            auth,
+            credentials?.email || '',
+            credentials?.password || ''
+          );
           if (userCredential) {
-            return { id: userCredential.user.uid, name: userCredential.user.displayName, email: userCredential.user.email };
+            return {
+              id: userCredential.user.uid,
+              name: userCredential.user.displayName,
+              email: userCredential.user.email,
+            };
           } else {
             return null;
           }
@@ -34,17 +42,23 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  adapter: FirestoreAdapter(firestore) as unknown as NextAuthOptions['adapter'],
+  // adapter: FirestoreAdapter(firestore) as unknown as NextAuthOptions['adapter'],
 
   callbacks: {
-    async jwt({ token, ...rest }) {
+    async jwt({ token, user }) {
+      if (user) {
+        const isAdmin = (await admin.getUser(user.id)).customClaims?.admin;
+        token.id = user.id;
+        token.role = isAdmin ? 'admin' : 'user'
+      }
+
       return token;
     },
 
     async session({ session, token, user }) {
+      session.user.id = token.id;
+      session.user.role = token.role
       return session;
     },
-
-    // Other callback events can be added here as needed
   },
 };

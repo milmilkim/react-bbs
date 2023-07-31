@@ -2,7 +2,7 @@
 
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { FirebaseError } from '@firebase/util';
-import { auth } from '@/utils/firebase';
+import { auth } from '@/lib/firebase';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { getDatabase, ref, set } from 'firebase/database';
 import useAuth from '@/hooks/auth/useAuth';

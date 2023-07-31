@@ -1,15 +1,27 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { authOptions } from '@/lib/authOptions';
-import { getServerSession } from 'next-auth';
+import { getToken } from 'next-auth/jwt';
+import { type NextRequest, NextResponse } from 'next/server';
 
-// This function can be marked `async` if using `await` inside
-export async function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname.startsWith('/auth')) {
-    // const session = await getSession();
-    // if (session) {
-    //   console.log('dd');
-    // }
+export async function middleware(req: NextRequest) {
+  // 로그인 중일 땐 로그인 페이지 접근 안 됨
+  if (req.nextUrl.pathname.startsWith('/auth')) {
+    const token = await getToken({ req, secret: 'secret', raw: false });
+    if (token) {
+      return NextResponse.redirect(new URL('/', req.url));
+    }
+  }
+
+  // 어드민 권한 체크
+  if (req.nextUrl.pathname.startsWith('/admin')) {
+    const token = await getToken({ req, secret: 'secret', raw: false });
+
+    if(!token) {
+      return NextResponse.redirect(new URL('/auth/login', req.url));
+    }
+
+    if (token.role !== 'admin') {
+      return NextResponse.redirect(new URL('/', req.url));
+    }
+
   }
 }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { auth } from '@/utils/firebase';
+import { auth } from '@/lib/firebase';
 import firebaseConfig from '../../../firebase.config';
 import { firebaseConfigKey } from '@/types/firebase';
 import { orbit } from '@/utils/googleFonts';

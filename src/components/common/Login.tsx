@@ -5,7 +5,7 @@ import { useAtom } from 'jotai';
 import useLogin from '@/hooks/auth/useLogin';
 import { useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '@/utils/firebase';
+import { auth } from '@/lib/firebase';
 
 export default function Login() {
   const [isLogin] = useAtom(isLoginAtom);

@@ -42,7 +42,6 @@ export default function Home() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
       const user = userCredential.user;
-      console.log(user);
 
       writeUserData(user.uid);
     } catch (err) {

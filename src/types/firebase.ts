@@ -1,9 +1,1 @@
-export type firebaseConfigKey =
-  | 'apiKey'
-  | 'authDomain'
-  | 'authDomain'
-  | 'projectId'
-  | 'storageBucket'
-  | 'messagingSenderId'
-  | 'appId'
-  | 'databaseUrl';
+export type firebaseConfigKey = 'apiKey' | 'authDomain' | 'authDomain' | 'projectId' | 'storageBucket' | 'messagingSenderId' | 'appId' | 'databaseURL';

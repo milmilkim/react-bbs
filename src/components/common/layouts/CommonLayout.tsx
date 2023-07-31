@@ -13,9 +13,6 @@ const CommonLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
       {isShowSpinner ? <LoadingSpinner /> : null}
-      <ul>
-        <li>{isLogin ? <Link href="/admin">어드민</Link> : <Link href='/auth/login'>로그인</Link>}</li>
-      </ul>
       <div>{children}</div>
     </div>
   );

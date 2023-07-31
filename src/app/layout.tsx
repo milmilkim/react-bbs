@@ -5,8 +5,8 @@ import { onValue, ref } from 'firebase/database';
 import NoAdmin from '@/components/common/NoAdmin';
 import 'src/app/globals.css';
 import CommonLayout from '@/components/common/layouts/CommonLayout';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
-
+import { SessionProvider } from 'next-auth/react';
+import { NextAuthProvider } from '@/app/provider';
 export const metadata: Metadata = {
   title: 'My App',
   description: '넥스트예용',
@@ -26,17 +26,15 @@ export const metadata: Metadata = {
 //   });
 // };
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang='ko'>
+    <html lang="ko">
       <body>
         <>
-          <Login />
-          <CommonLayout>{children}</CommonLayout>
+          <NextAuthProvider>
+            <Login />
+            <CommonLayout>{children}</CommonLayout>
+          </NextAuthProvider>
         </>
       </body>
     </html>

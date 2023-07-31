@@ -1,17 +1,17 @@
 'use client';
 
-import { useState } from 'react';
 import { Layout, Menu, Button, theme } from 'antd';
 import type { MenuProps } from 'antd';
 import {
   DesktopOutlined,
-  FileOutlined,
   PieChartOutlined,
   TeamOutlined,
   UserOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined
+  LogoutOutlined,
 } from '@ant-design/icons';
+import {FaHome, FaHammer} from 'react-icons/fa'
+import Link from 'next/link';
+
 const { Header, Sider, Content } = Layout;
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -31,19 +31,18 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem('Option 1', '1', <PieChartOutlined />),
-  getItem('Option 2', '2', <DesktopOutlined />),
-  getItem('User', 'sub1', <UserOutlined />, [
-    getItem('Tom', '3'),
-    getItem('Bill', '4'),
-    getItem('Alex', '5'),
-  ]),
-  getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-  getItem('Files', '9', <FileOutlined />),
+  getItem(<Link href="/admin/home">홈화면 설정</Link>, '1', <FaHome />),
+  getItem(<Link href="/admin/setting">환경 설정</Link>, '2', <FaHammer />),
+  // getItem('User', 'sub1', <UserOutlined />, [
+  //   getItem('Tom', '3'),
+  //   getItem('Bill', '4'),
+  //   getItem('Alex', '5'),
+  // ]),
+  // getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
+  getItem(<Link href="/">메인으로</Link>, '9', <LogoutOutlined />),
 ];
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
-  const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -69,13 +68,11 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
         />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
-        </Header>
+      
         <Content
           style={{
             margin: '24px 16px',
             padding: 24,
-            minHeight: 280,
             background: colorBgContainer,
           }}>
           {children}

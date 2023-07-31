@@ -1,4 +1,7 @@
 
+import { redirect } from 'next/navigation'
+
 export default function () {
-  return <div>admin page</div>;
+  redirect('/admin/home')
+
 }

@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { useAtomValue } from 'jotai';
 import { isShowSpinnerAtom } from '@/store/LayoutStore';

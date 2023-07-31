@@ -38,7 +38,7 @@ const NoAdmin = () => {
       'apiKey',
       'appId',
       'authDomain',
-      'databaseUrl',
+      'databaseURL',
       'messagingSenderId',
       'projectId',
       'storageBucket',

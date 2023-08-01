@@ -5,7 +5,6 @@ import { FirebaseError } from '@firebase/util';
 import { auth } from '@/lib/firebase';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { getDatabase, ref, set } from 'firebase/database';
-import useAuth from '@/hooks/auth/useAuth';
 import { useEffect } from 'react';
 import { isLoginAtom } from '@/store/authStore';
 import { useAtom } from 'jotai';
@@ -29,15 +28,6 @@ export default function Home() {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const [isLogin] = useAtom(isLoginAtom);
-
-  const { checkNeedLogin } = useAuth();
-
-  useEffect(() => {
-    console.log(isLogin);
-    checkNeedLogin();
-  }, [isLogin]);
-
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
@@ -58,7 +48,6 @@ export default function Home() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <input defaultValue="test" {...register('email')} />
         <input type="password" {...register('password', { required: true })} />
-
         <button type="submit">회원가입</button>
       </form>
     </main>

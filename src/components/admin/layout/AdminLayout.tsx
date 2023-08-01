@@ -9,7 +9,7 @@ import {
   UserOutlined,
   LogoutOutlined,
 } from '@ant-design/icons';
-import {FaHome, FaHammer} from 'react-icons/fa'
+import { FaHome, FaHammer, FaIceCream } from 'react-icons/fa';
 import Link from 'next/link';
 
 const { Header, Sider, Content } = Layout;
@@ -20,7 +20,7 @@ function getItem(
   label: React.ReactNode,
   key: React.Key,
   icon?: React.ReactNode,
-  children?: MenuItem[],
+  children?: MenuItem[]
 ): MenuItem {
   return {
     key,
@@ -31,15 +31,13 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem(<Link href="/admin/home">홈화면 설정</Link>, '1', <FaHome />),
-  getItem(<Link href="/admin/setting">환경 설정</Link>, '2', <FaHammer />),
-  // getItem('User', 'sub1', <UserOutlined />, [
-  //   getItem('Tom', '3'),
-  //   getItem('Bill', '4'),
-  //   getItem('Alex', '5'),
-  // ]),
+  getItem(<Link href='/admin/home'>홈화면 설정</Link>, '1', <FaHome />),
+  getItem(<Link href='/admin/setting'>환경 설정</Link>, '2', <FaHammer />),
+  getItem('게시판 설정', 'sub1', <FaIceCream />, [
+    getItem(<Link href='/admin/board/category'>게시판 목록</Link>, '3'),
+  ]),
   // getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-  getItem(<Link href="/">메인으로</Link>, '9', <LogoutOutlined />),
+  getItem(<Link href='/'>메인으로</Link>, '9', <LogoutOutlined />),
 ];
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
@@ -57,9 +55,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
           top: 0,
           bottom: 0,
         }}>
-        <div className="m-5 text-white">
-          milmilboard admin
-        </div>
+        <div className='m-5 text-white'>milmilboard admin</div>
         <Menu
           theme='dark'
           mode='inline'
@@ -68,7 +64,6 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
         />
       </Sider>
       <Layout>
-      
         <Content
           style={{
             margin: '24px 16px',

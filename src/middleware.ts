@@ -13,7 +13,6 @@ export async function middleware(req: NextRequest) {
   // 어드민 권한 체크
   if (req.nextUrl.pathname.startsWith('/admin')) {
     const token = await getToken({ req, secret: process.env.SECRET, raw: false });
-    console.log(token)
 
     if(!token) {
       return NextResponse.redirect(new URL('/auth/login', req.url));

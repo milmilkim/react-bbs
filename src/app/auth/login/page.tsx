@@ -67,7 +67,7 @@ const NoAdmin = () => {
   };
 
   return (
-    <div className={`bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-screen ${orbit.className} flex  flex-col`} style={{ backgroundColor: 'rgba(79, 70, 229, 0.3)' }}>
+    <div className={`h-screen ${orbit.className} flex  flex-col w-screen`} >
       <h1 className={`text-5xl text-right pr-10 pt-10`}>milmilboard</h1>
       <div className="grid place-content-center">
         <div className="p-5 bg-white border rounded-md bg-opacity-80">
@@ -84,7 +84,7 @@ const NoAdmin = () => {
             <>
               <p className="my-4">로그인</p>
               <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-                <div className="mb-4 flex  items-center">
+                <div className="mb-4 flex items-center">
                   <FaEnvelope className="mx-3" />
                   <input
                     placeholder="이메일"

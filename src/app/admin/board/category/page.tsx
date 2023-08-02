@@ -13,24 +13,27 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { Button, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Board } from '@/types/board';
 import BoardModal from '@/components/admin/board/BoardModal';
+import useDatabase from '@/hooks/useDatabase';
+import { database as db } from '@/lib/firebase';
+import { ref } from 'firebase/database';
 
 const columns: ColumnsType<Board> = [
   {
     key: 'sort',
   },
   {
-    title: '게시판 이름',
+    title: '이름',
     dataIndex: 'title',
   },
   {
-    title: '메뉴에 표시',
+    title: '공개 설정',
     dataIndex: 'isPublic',
   },
   {
-    title: '게시판 타입',
+    title: '타입',
     dataIndex: 'type',
   },
 ];
@@ -56,7 +59,7 @@ const Row = ({ children, ...props }: RowProps) => {
     ...props.style,
     transform: CSS.Transform.toString(transform && { ...transform, scaleY: 1 }),
     transition,
-    ...(isDragging ? { position: 'relative', zIndex: 9999 } : {}),
+    ...(isDragging ? { position: 'relative', zIndex: 10 } : {}),
   };
 
   return (
@@ -94,14 +97,20 @@ const App: React.FC = () => {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const { loadRealtime } = useDatabase(setDataSource);
+
+  useEffect(() => {
+    const categoryRef = ref(db, 'board/categories');
+    loadRealtime(categoryRef);
+  }, []);
 
   return (
     <div>
       <div className='flex'>
         <div className='ml-auto'>
-          <Button>추가</Button>
+          <Button onClick={() => setIsOpen(true)}>게시판 추가</Button>
           <Button type='primary' className='ml-2 mb-5'>
-            저장
+            순서 저장
           </Button>
         </div>
       </div>
@@ -122,7 +131,7 @@ const App: React.FC = () => {
           />
         </SortableContext>
       </DndContext>
-      <BoardModal setIsOpen={setIsOpen} />
+      <BoardModal setIsOpen={setIsOpen} isOpen={isOpen} />
     </div>
   );
 };

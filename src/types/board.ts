@@ -1,7 +1,8 @@
 interface Board {
   title: string;
+  url: string;
   type: BoardType;
-  order: number;
+  order?: number;
   id: string;
   isPublic: boolean;
 }

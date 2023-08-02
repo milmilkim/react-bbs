@@ -3,58 +3,30 @@
 import Editor from '@/components/common/form/Editor';
 import { Button, message } from 'antd';
 import { useEffect, useState } from 'react';
-import { get, getDatabase, ref, set } from 'firebase/database';
-import { v4 as uuidv4 } from 'uuid';
-import { isShowSpinnerAtom } from '@/store/LayoutStore';
-import { useSetAtom } from 'jotai';
-import { database } from '@/lib/firebase';
+import { ref } from 'firebase/database';
+import { database as db } from '@/lib/firebase';
+import useDatabase from '@/hooks/useDatabase';
+import useMessage from '@/hooks/admin/useMessage';
 
 const Home = () => {
-  const setIsShowSpinner = useSetAtom(isShowSpinnerAtom);
-
   const [value, setValue] = useState('');
-  const [messageApi, contextHolder] = message.useMessage();
-
-
-  const success = () => {
-    console.log('message')
-    messageApi.open({
-      type: 'success',
-      content: '저장되었습니다.',
-    });
-  };
+  const {contextHolder, success} = useMessage();
 
   const save = async () => {
-    setIsShowSpinner(true);
-    await set(ref(database, 'home/' + 'html'), value);
-    setIsShowSpinner(false);
+    await writeData('home/html', value);
     success();
   };
 
-  const load = async () => {
-    setIsShowSpinner(true);
-    const homeRef = ref(database, 'home/html');
-    const snapshot = await get(homeRef);
-    let data;
-    if (snapshot.exists()) {
-      const val = snapshot.val();
-      setValue(val);
-    } else {
-      console.log('No data available.');
-    }
-    setIsShowSpinner(false);
-
-    return data;
-  };
+  const { load, writeData } = useDatabase(setValue);
 
   useEffect(() => {
-    load();
+    const homeRef = ref(db, 'home/html');
+    load(homeRef);
   }, []);
 
   return (
     <div>
-            {contextHolder}
-
+      <>{contextHolder}</>
       <Editor value={value} setValue={setValue} />
       <Button type='primary' className='my-5' onClick={save}>
         저장

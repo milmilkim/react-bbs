@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import MainMenu from '@/components/common/layouts/MainMenu';
 
 const CommonLayout = ({ children }: { children: React.ReactNode }) => {
   const isShowSpinner = useAtomValue(isShowSpinnerAtom);
@@ -21,9 +22,15 @@ const CommonLayout = ({ children }: { children: React.ReactNode }) => {
       {isShowSpinner ? <LoadingSpinner /> : null}
       {!regex.test(path) ? (
         <div>
+          <MainMenu />
           <nav>
             <ul>
-              {isAdmin && <li> <Link href='/admin'>어드민</Link></li>}
+              {isAdmin && (
+                <li>
+                  {' '}
+                  <Link href='/admin'>어드민</Link>
+                </li>
+              )}
               {session.data ? (
                 <li onClick={() => signOut()}>로그아웃</li>
               ) : (
@@ -35,7 +42,9 @@ const CommonLayout = ({ children }: { children: React.ReactNode }) => {
           </nav>
           <div>{children}</div>
         </div>
-      ) : <div>{children}</div>}
+      ) : (
+        <div>{children}</div>
+      )}
     </div>
   );
 };

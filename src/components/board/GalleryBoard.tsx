@@ -1,7 +1,8 @@
+const GalleryBoard = async () => {
+  const res = await fetch('https://picsum.photos/v2/list');
+  const data = await res.json();
 
-
-const GalleryBoard = () => {
-  return <div>않뇽</div>;
+  return <div>{JSON.stringify(data)}</div>;
 };
 
 export default GalleryBoard;

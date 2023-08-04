@@ -1,4 +1,4 @@
-import { DatabaseReference, Query, get } from 'firebase/database';
+import { DatabaseReference, Query, get, onValue } from 'firebase/database';
 
 const load = async (ref: Query | DatabaseReference) => {
   const snapshot = await get(ref);
@@ -10,4 +10,20 @@ const load = async (ref: Query | DatabaseReference) => {
   }
 };
 
-export { load };
+const loadRealtime = <T = any>(ref: Query | DatabaseReference): Promise<T> => {
+  return new Promise((resolve, reject) => {
+    onValue(ref, (snapshot) => {
+      if (snapshot.exists()) {
+        const val : object = snapshot.val();
+        const array = Object.values(val) as any;
+        if(array.length === 1) {
+          resolve(array[0])
+        }
+        resolve(array);
+      } else {
+        reject('No data available.');
+      }
+    });
+  });
+};
+export { load, loadRealtime };

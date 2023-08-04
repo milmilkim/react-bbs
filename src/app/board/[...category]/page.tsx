@@ -1,13 +1,22 @@
-import { load } from '@/utils/database';
+import { loadRealtime } from '@/utils/database';
 import { getCategoryMetaRef } from '@/refs/boardRef';
+import { Board } from '@/types/board';
+import useBoardType from '@/utils/getBoardType';
+import getComponent from '@/utils/getBoardType';
 
 const Board = async ({ params }: { params: { category: string } }) => {
-  const metaRaf = getCategoryMetaRef(params.category[0]);
-  const meta = await load(metaRaf);
+  const metaRef = getCategoryMetaRef(params.category[0]);
+  const meta = await loadRealtime<Board>(metaRef);
+  const title = meta.title;
+  const type = meta.type;
+
+  const BoardComponent = getComponent(type);
 
   return (
     <>
-      <h1>board</h1>
+      <div>{title}</div>
+      <div>{type}</div>
+      <BoardComponent />
     </>
   );
 };
